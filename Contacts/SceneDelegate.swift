@@ -1,10 +1,3 @@
-//
-//  SceneDelegate.swift
-//  Contacts
-//
-//  Created by Юрий Яковлев on 12.10.2022.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
