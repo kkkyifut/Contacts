@@ -1,22 +1,24 @@
 import UIKit
 
 class ViewController: UIViewController {
+    var storage: ContactStorageProtocol!
     private var contacts: [ContactProtocol] = [] {
         didSet {
             contacts.sort{ $0.title < $1.title }
+            storage.save(contacts: contacts)
         }
     }
+
     @IBOutlet var tableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        storage = ContactStorage()
         loadContacts()
     }
 
     private func loadContacts() {
-        contacts.append(Contact(title: "Саня Техосмотр", phone: "+79991231234"))
-        contacts.append(Contact(title: "Владимир Анатольевич", phone: "+79991234564"))
-        contacts.append(Contact(title: "Сильвестр", phone: "+79991357915"))
+        contacts = storage.load()
     }
 
     @IBAction func showNewContactAlert() {
@@ -73,7 +75,7 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        print("Определяем доступные действия для строки \(indexPath.row)")
+        print("Определяем доступные действия для строки с индексом \(indexPath.row)")
         let actionDelete = UIContextualAction(style: .destructive, title: "Удалить") { _,_,_ in
             self.contacts.remove(at: indexPath.row)
             tableView.reloadData()
